@@ -4,6 +4,7 @@ import {
   collection,
   onSnapshot,
   addDoc,
+  setDoc,
   deleteDoc,
   doc,
   query,
@@ -12,6 +13,7 @@ import {
   serverTimestamp,
   getDoc,
   updateDoc,
+  deleteField,
 } from "firebase/firestore";
 
 import {
@@ -43,35 +45,15 @@ let name = "";
 let email = "";
 let uID = "null";
 const d = new Date();
-let day = d.getDay();
+let date = d.toJSON().slice(0, 10);
+let day = d.getDay().toString();
+date = "2023-06-04";
+day = "0";
 
 // collection ref
 let userRef = collection(db, uID);
 let q = query(userRef, where("day", "==", day));
 const provider = new GoogleAuthProvider();
-
-const addBookForm = document.querySelector(".add");
-addBookForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  addDoc(bookRef, {
-    title: addBookForm.title.value,
-    author: addBookForm.author.value,
-  }).then(() => {
-    addBookForm.reset();
-  });
-});
-
-const deleteBookForm = document.querySelector(".delete");
-deleteBookForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const docRef = doc(db, "books", deleteBookForm.id.value);
-
-  deleteDoc(docRef).then(() => {
-    deleteBookForm.reset();
-  });
-});
 
 const nameDisplay = document.getElementById("nameDisplay");
 
@@ -103,7 +85,7 @@ logoutForm.addEventListener("submit", (e) => {
     });
 });
 
-onAuthStateChanged(auth, (user) => {
+await onAuthStateChanged(auth, (user) => {
   if (user == null) {
     name = "";
     email = "";
@@ -117,21 +99,160 @@ onAuthStateChanged(auth, (user) => {
     uID = user.uid;
     logoutForm.style.display = "block";
     signInForm.style.display = "none";
-    updateDocument(uID);
+    updateDocument(uID, day);
   }
   nameDisplay.textContent = name;
 });
 
-function updateDocument(ref) {
-  console.log("qo");
+function updateDocument(ref, day) {
   userRef = collection(db, ref);
-  let q = query(userRef, where("__name__", "==", day.toString()));
-  console.log(day);
+  let q = query(userRef, where("__name__", "==", day));
+  let exercises = [];
   unsubscribe = onSnapshot(q, (snapshot) => {
-    let data = [];
     snapshot.docs.forEach((doc) => {
-      data.push({ ...doc.data(), id: doc.id });
+      const exerciseData = doc.data();
+      Object.keys(exerciseData).forEach((key) => {
+        if (key !== "id") {
+          const exerciseName = key;
+          const latestDate = Object.keys(exerciseData[exerciseName])
+            .sort()
+            .pop();
+          const [lastReps, lastWeight] = exerciseData[exerciseName][latestDate];
+          exercises.push([
+            exerciseName,
+            lastReps.toString(),
+            lastWeight.toString(),
+          ]);
+        }
+      });
+      exercises.forEach((exercise) => {
+        console.log(exercise[0], exercise[1], exercise[2]);
+        drawExercise(exercise[0], exercise[1], exercise[2]);
+      });
     });
-    console.log(data);
   });
+
+  // Draw Add
+}
+
+async function addExercise(exerciseName, reps, weight) {
+  const newData = {
+    [exerciseName]: {
+      [date]: [reps, weight],
+    },
+  };
+
+  await setDoc(doc(db, uID, day), newData, { merge: true });
+}
+
+async function deleteExercise(exerciseName) {
+  const confirmed = confirm("Are you sure you want to delete this exercise?");
+  if (confirmed) {
+    await updateDoc(doc(db, uID, day), { [exerciseName]: deleteField() });
+  }
+}
+
+function drawExercise(exerciseName, prevReps, prevWeight) {
+  // Create the outer div element with the class "exerciseBox"
+  const exerciseBox = document.createElement("div");
+  exerciseBox.classList.add("exerciseBox");
+
+  // Create the form element for adding exercises
+  const addExerciseForm = document.createElement("form");
+  addExerciseForm.classList.add("addExercise");
+  addExerciseForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const exerciseBox = updateButton.closest(".exerciseBox");
+    const weight = exerciseBox.querySelector(".weight").value;
+    const reps = exerciseBox.querySelector(".reps").value;
+    addExercise(exerciseName, reps, weight);
+  });
+
+  // Create the inner div element with the class "exerciseTitle"
+  const exerciseTitle = document.createElement("div");
+  exerciseTitle.classList.add("exerciseTitle");
+
+  // Create the h2 element for the exercise name
+  const exerciseNameHeading = document.createElement("h2");
+  exerciseNameHeading.classList.add("exerciseName");
+  exerciseNameHeading.textContent = exerciseName;
+
+  // Append the exercise name heading to the exercise title div
+  exerciseTitle.appendChild(exerciseNameHeading);
+
+  // Append the exercise title div to the add exercise form
+  addExerciseForm.appendChild(exerciseTitle);
+
+  // Create the inner div element with the class "exerciseDescription"
+  const exerciseDescription = document.createElement("div");
+  exerciseDescription.classList.add("exerciseDescription");
+
+  // Create the input element for weight
+  const weightInput = document.createElement("input");
+  weightInput.type = "text";
+  weightInput.name = "weight";
+  weightInput.placeholder = prevWeight;
+  weightInput.classList.add("weight");
+  weightInput.value = "";
+
+  // Create the h2 element for weight unit
+  const weightUnit = document.createElement("h2");
+  weightUnit.textContent = " Lbs";
+
+  // Create the spacer div element
+  const spacer = document.createElement("div");
+  spacer.classList.add("spacer");
+
+  // Create the input element for reps
+  const repsInput = document.createElement("input");
+  repsInput.type = "text";
+  repsInput.name = "reps";
+  repsInput.placeholder = prevReps;
+  repsInput.classList.add("reps");
+  repsInput.value = "";
+
+  // Create the h2 element for reps unit
+  const repsUnit = document.createElement("h2");
+  repsUnit.textContent = " reps";
+
+  // Append all elements to the exercise description div
+  exerciseDescription.appendChild(weightInput);
+  exerciseDescription.appendChild(weightUnit);
+  exerciseDescription.appendChild(spacer);
+  exerciseDescription.appendChild(repsInput);
+  exerciseDescription.appendChild(repsUnit);
+
+  // Append the exercise description div to the add exercise form
+  addExerciseForm.appendChild(exerciseDescription);
+
+  // Create the button for updating the exercise
+  const updateButton = document.createElement("button");
+  updateButton.textContent = "Update";
+  updateButton.classList.add("update");
+
+  // Append the add exercise form and update button to the exercise box div
+  addExerciseForm.appendChild(updateButton);
+  exerciseBox.appendChild(addExerciseForm);
+
+  // Create the form element for deleting exercises
+  const deleteExerciseForm = document.createElement("form");
+  deleteExerciseForm.classList.add("deleteExercise");
+  deleteExerciseForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    deleteExercise(exerciseName);
+  });
+
+  // Create the delete button
+  const deleteButton = document.createElement("button");
+
+  // Append the delete button to the delete exercise form
+  deleteExerciseForm.appendChild(deleteButton);
+
+  // Append the delete exercise form to the exercise box div
+  exerciseBox.appendChild(deleteExerciseForm);
+
+  // Append the exercise box to the desired parent element on the webpage
+  const exerciseContainer =
+    document.getElementsByClassName("exerciseContainer")[0];
+  exerciseContainer.appendChild(exerciseBox);
 }

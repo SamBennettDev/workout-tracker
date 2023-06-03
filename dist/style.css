@@ -1,3 +1,93 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+
 body {
-  background-color: beige;
+  background-color: #21252b;
+  color: #cccccc;
+  font-family: "Montserrat", sans-serif;
+}
+
+button {
+  background-color: #21252b;
+  color: #cccccc;
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.logout {
+  display: none;
+}
+
+.signIn {
+  display: none;
+}
+
+.exerciseBox {
+  height: 150px;
+  width: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.exerciseTitle {
+  background-color: #2d313b;
+  height: 25%;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.exerciseDescription {
+  background-color: #282c34;
+  height: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.update {
+  background-color: #2d313b;
+  height: 25%;
+  width: 100%;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  font-size: 16px;
+  margin: auto;
+}
+
+.weight {
+  width: 15%;
+  height: 40%;
+}
+
+.reps {
+  width: 15%;
+  height: 40%;
+}
+
+.spacer {
+  width: 10%;
+}
+
+.updatePrevButton {
+  height: 50%;
+  aspect-ratio: 1 / 1;
+}
+
+.addExercise {
+  height: 100%;
+}
+
+.deleteExercise {
+  position: absolute;
+  top: 0;
+  right: 5%;
+}
+
+.deleteExerciseButton {
+  background-color: #cccccc;
 }
