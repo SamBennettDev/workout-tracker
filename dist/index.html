@@ -10,7 +10,15 @@
   <body>
     <div class="navbar">
       <div class="title">
-        <h1>Workout</h1>
+        <div class="dayChanger">
+          <form class="back">
+            <button class="changeDay">&lt;</button>
+          </form>
+          <h1 class="dayDisplay"></h1>
+          <form class="forward">
+            <button class="changeDay">&gt;</button>
+          </form>
+        </div>
       </div>
       <div class="userContent">
         <p id="nameDisplay"></p>
@@ -22,6 +30,7 @@
         </form>
       </div>
     </div>
+    <div class="navbarSpacer"></div>
     <div class="exerciseContainer"></div>
     <div class="addExerciseContainer">
       <form class="addExercise">

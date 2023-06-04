@@ -84,6 +84,8 @@ logoutForm.addEventListener("submit", (e) => {
     });
 });
 
+const dayChanger = document.querySelector(".dayChanger");
+
 const addExerciseContainerForm = document.querySelector(
   ".addExerciseContainer"
 );
@@ -94,6 +96,7 @@ await onAuthStateChanged(auth, (user) => {
     uID = "";
     signInForm.style.display = "block";
     logoutForm.style.display = "none";
+    dayChanger.style.display = "none";
     addExerciseContainerForm.style.display = "none";
     if (unsubscribeDays != null) {
       unsubscribeDays();
@@ -106,6 +109,7 @@ await onAuthStateChanged(auth, (user) => {
     uID = user.uid;
     logoutForm.style.display = "block";
     signInForm.style.display = "none";
+    dayChanger.style.display = "flex";
     addExerciseContainerForm.style.display = "block";
     getExercises(uID);
     updateDocument(uID);
@@ -126,7 +130,6 @@ async function getExercises(uID) {
             .sort()
             .pop();
           const [lastReps, lastWeight] = exerciseData[exerciseName][latestDate];
-          console.log(exerciseName);
           exercises[exerciseName] = [
             lastReps.toString(),
             lastWeight.toString(),
@@ -146,6 +149,7 @@ function removeExercises() {
 }
 
 async function updateDocument(ref) {
+  dayDisplay.textContent = numToDay(day);
   const dayRef = doc(db, ref, day);
   const dayExercises = await getDoc(dayRef);
   removeExercises();
@@ -158,6 +162,27 @@ async function updateDocument(ref) {
   }
 }
 
+function numToDay(num) {
+  switch (num) {
+    case "0":
+      return "\u00A0Sun\u00A0";
+    case "1":
+      return "\u00A0Mon\u00A0";
+    case "2":
+      return "\u00A0Tue\u00A0";
+    case "3":
+      return "\u00A0Wed\u00A0";
+    case "4":
+      return "\u00A0Thu\u00A0";
+    case "5":
+      return "\u00A0Fri\u00A0";
+    default:
+      return "\u00A0Sat\u00A0";
+  }
+}
+
+let dayDisplay = document.querySelector(".dayDisplay");
+
 let form = document.querySelector(".addExercise");
 form.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -166,6 +191,28 @@ form.addEventListener("submit", (event) => {
 
   addExercise(inputValue, 0, 0);
   input.value = "";
+});
+
+let forward = document.querySelector(".forward");
+forward.addEventListener("submit", (event) => {
+  event.preventDefault();
+  if (Number(day) == 6) {
+    day = "0";
+  } else {
+    day = (Number(day) + 1).toString();
+  }
+  updateDocument(uID);
+});
+
+let back = document.querySelector(".back");
+back.addEventListener("submit", (event) => {
+  event.preventDefault();
+  if (Number(day) == 0) {
+    day = "6";
+  } else {
+    day = (Number(day) - 1).toString();
+  }
+  updateDocument(uID);
 });
 
 async function addExercise(exerciseName, reps, weight) {
@@ -287,6 +334,7 @@ function drawExercise(exerciseName, prevReps, prevWeight) {
 
   // Create the delete button
   const deleteButton = document.createElement("button");
+  deleteButton.classList.add("deleteButton");
 
   // Append the delete button to the delete exercise form
   deleteExerciseForm.appendChild(deleteButton);
