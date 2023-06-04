@@ -8,15 +8,27 @@
     <title>Workout Tracker</title>
   </head>
   <body>
-    <h1>Workout</h1>
-    <form class="signIn">
-      <button>sign in</button>
-    </form>
-    <form class="logout">
-      <button>logout</button>
-    </form>
-    <h2 id="nameDisplay"></h2>
+    <div class="navbar">
+      <div class="title">
+        <h1>Workout</h1>
+      </div>
+      <div class="userContent">
+        <p id="nameDisplay"></p>
+        <form class="signIn">
+          <button>sign in</button>
+        </form>
+        <form class="logout">
+          <button>logout</button>
+        </form>
+      </div>
+    </div>
     <div class="exerciseContainer"></div>
+    <div class="addExerciseContainer">
+      <form class="addExercise">
+        <div class="addExerciseName"><input class="addExerciseInput" /></div>
+        <button class="addExerciseButton">Add Exercise</button>
+      </form>
+    </div>
     <script src="bundle.js"></script>
   </body>
 </html>

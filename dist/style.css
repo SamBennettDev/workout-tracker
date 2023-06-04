@@ -14,12 +14,35 @@ button {
   cursor: pointer;
 }
 
+.navbar {
+  width: 100%;
+  background-color: #2d313b;
+  display: flex;
+}
+
 .logout {
   display: none;
+  margin-bottom: 20px;
 }
 
 .signIn {
   display: none;
+  padding: auto;
+}
+
+.title {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userContent {
+  width: 40%;
+  left: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
 }
 
 .exerciseBox {
@@ -78,7 +101,7 @@ button {
   aspect-ratio: 1 / 1;
 }
 
-.addExercise {
+.updateExercise {
   height: 100%;
 }
 
@@ -90,4 +113,37 @@ button {
 
 .deleteExerciseButton {
   background-color: #cccccc;
+}
+.addExerciseContainer {
+  display: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.addExercise {
+  height: 112.5px;
+}
+
+.addExerciseName {
+  background-color: #282c34;
+  height: 66%;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.addExerciseInput {
+  font-size: 25px;
+}
+
+.addExerciseButton {
+  height: 33.3%;
+  width: 100%;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  background-color: #2d313b;
+  font-size: 16px;
+  margin: auto;
 }

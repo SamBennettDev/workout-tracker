@@ -9,7 +9,6 @@ import {
   doc,
   query,
   where,
-  orderBy,
   serverTimestamp,
   getDoc,
   updateDoc,
@@ -47,8 +46,7 @@ let uID = "null";
 const d = new Date();
 let date = d.toJSON().slice(0, 10);
 let day = d.getDay().toString();
-date = "2023-06-04";
-day = "0";
+let exercises = {};
 
 // collection ref
 let userRef = collection(db, uID);
@@ -57,7 +55,8 @@ const provider = new GoogleAuthProvider();
 
 const nameDisplay = document.getElementById("nameDisplay");
 
-let unsubscribe = null;
+let unsubscribeDays = null;
+let unsubscribeExercises = null;
 
 const signInForm = document.querySelector(".signIn");
 signInForm.addEventListener("submit", (e) => {
@@ -85,6 +84,9 @@ logoutForm.addEventListener("submit", (e) => {
     });
 });
 
+const addExerciseContainerForm = document.querySelector(
+  ".addExerciseContainer"
+);
 await onAuthStateChanged(auth, (user) => {
   if (user == null) {
     name = "";
@@ -92,23 +94,29 @@ await onAuthStateChanged(auth, (user) => {
     uID = "";
     signInForm.style.display = "block";
     logoutForm.style.display = "none";
-    unsubscribe();
+    addExerciseContainerForm.style.display = "none";
+    if (unsubscribeDays != null) {
+      unsubscribeDays();
+      unsubscribeExercises();
+    }
+    removeExercises();
   } else {
     name = user.displayName;
     email = user.email;
     uID = user.uid;
     logoutForm.style.display = "block";
     signInForm.style.display = "none";
-    updateDocument(uID, day);
+    addExerciseContainerForm.style.display = "block";
+    getExercises(uID);
+    updateDocument(uID);
   }
   nameDisplay.textContent = name;
 });
 
-function updateDocument(ref, day) {
-  userRef = collection(db, ref);
-  let q = query(userRef, where("__name__", "==", day));
-  let exercises = [];
-  unsubscribe = onSnapshot(q, (snapshot) => {
+async function getExercises(uID) {
+  userRef = collection(db, uID);
+  let q = query(userRef, where("__name__", "==", "exercises"));
+  unsubscribeExercises = await onSnapshot(q, (snapshot) => {
     snapshot.docs.forEach((doc) => {
       const exerciseData = doc.data();
       Object.keys(exerciseData).forEach((key) => {
@@ -118,22 +126,47 @@ function updateDocument(ref, day) {
             .sort()
             .pop();
           const [lastReps, lastWeight] = exerciseData[exerciseName][latestDate];
-          exercises.push([
-            exerciseName,
+          console.log(exerciseName);
+          exercises[exerciseName] = [
             lastReps.toString(),
             lastWeight.toString(),
-          ]);
+          ];
         }
-      });
-      exercises.forEach((exercise) => {
-        console.log(exercise[0], exercise[1], exercise[2]);
-        drawExercise(exercise[0], exercise[1], exercise[2]);
       });
     });
   });
-
-  // Draw Add
 }
+
+function removeExercises() {
+  var elements = document.querySelectorAll(".exerciseBox");
+  // Iterate over each element and remove it
+  elements.forEach(function (element) {
+    element.remove();
+  });
+}
+
+async function updateDocument(ref) {
+  const dayRef = doc(db, ref, day);
+  const dayExercises = await getDoc(dayRef);
+  removeExercises();
+
+  for (const key in dayExercises.data()) {
+    const exerciseName = key;
+    const reps = exercises[exerciseName][0];
+    const weight = exercises[exerciseName][1];
+    drawExercise(exerciseName, reps, weight);
+  }
+}
+
+let form = document.querySelector(".addExercise");
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  let input = document.querySelector(".addExerciseInput");
+  let inputValue = input.value;
+
+  addExercise(inputValue, 0, 0);
+  input.value = "";
+});
 
 async function addExercise(exerciseName, reps, weight) {
   const newData = {
@@ -142,14 +175,24 @@ async function addExercise(exerciseName, reps, weight) {
     },
   };
 
-  await setDoc(doc(db, uID, day), newData, { merge: true });
+  await setDoc(doc(db, uID, "exercises"), newData, { merge: true });
+  await setDoc(
+    doc(db, uID, day),
+    { [exerciseName]: exerciseName },
+    { merge: true }
+  );
+  updateDocument(uID);
 }
 
 async function deleteExercise(exerciseName) {
   const confirmed = confirm("Are you sure you want to delete this exercise?");
   if (confirmed) {
     await updateDoc(doc(db, uID, day), { [exerciseName]: deleteField() });
+    await updateDoc(doc(db, uID, "exercises"), {
+      [exerciseName]: deleteField(),
+    });
   }
+  updateDocument(uID);
 }
 
 function drawExercise(exerciseName, prevReps, prevWeight) {
@@ -159,7 +202,7 @@ function drawExercise(exerciseName, prevReps, prevWeight) {
 
   // Create the form element for adding exercises
   const addExerciseForm = document.createElement("form");
-  addExerciseForm.classList.add("addExercise");
+  addExerciseForm.classList.add("updateExercise");
   addExerciseForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const exerciseBox = updateButton.closest(".exerciseBox");
@@ -197,7 +240,7 @@ function drawExercise(exerciseName, prevReps, prevWeight) {
 
   // Create the h2 element for weight unit
   const weightUnit = document.createElement("h2");
-  weightUnit.textContent = " Lbs";
+  weightUnit.textContent = "\u00A0Lbs";
 
   // Create the spacer div element
   const spacer = document.createElement("div");
@@ -213,7 +256,7 @@ function drawExercise(exerciseName, prevReps, prevWeight) {
 
   // Create the h2 element for reps unit
   const repsUnit = document.createElement("h2");
-  repsUnit.textContent = " reps";
+  repsUnit.textContent = "\u00A0reps";
 
   // Append all elements to the exercise description div
   exerciseDescription.appendChild(weightInput);
