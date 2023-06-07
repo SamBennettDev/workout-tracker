@@ -235,9 +235,6 @@ async function deleteExercise(exerciseName) {
   const confirmed = confirm("Are you sure you want to delete this exercise?");
   if (confirmed) {
     await updateDoc(doc(db, uID, day), { [exerciseName]: deleteField() });
-    await updateDoc(doc(db, uID, "exercises"), {
-      [exerciseName]: deleteField(),
-    });
   }
   updateDocument(uID);
 }
