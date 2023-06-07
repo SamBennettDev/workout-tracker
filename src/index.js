@@ -222,7 +222,9 @@ async function addExercise(exerciseName, reps, weight) {
     },
   };
 
-  await setDoc(doc(db, uID, "exercises"), newData, { merge: true });
+  if (!(exerciseName in exercises && reps == 0 && weight == 0)) {
+    await setDoc(doc(db, uID, "exercises"), newData, { merge: true });
+  }
   await setDoc(
     doc(db, uID, day),
     { [exerciseName]: exerciseName },
