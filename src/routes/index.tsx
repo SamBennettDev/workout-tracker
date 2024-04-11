@@ -1,16 +1,28 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { ErrorPage } from "@/features/misc";
-import { Landing } from "@/features/misc";
+import { protectedRoutes } from "./protected";
+import { publicRoutes } from "./public";
 
-const router = createBrowserRouter([
+import { useAuth } from "@/lib/auth";
+import { ErrorPage } from "@/features/misc";
+import { FOFPage } from "@/features/misc";
+
+const commonRoutes = [
   {
-    path: "/",
-    element: <Landing />,
+    path: "*",
+    element: <FOFPage />,
     errorElement: <ErrorPage />,
   },
-]);
+];
 
 export const AppRoutes = () => {
+  const [auth] = useAuth();
+
+  const routes = auth.user
+    ? protectedRoutes.concat(commonRoutes)
+    : publicRoutes.concat(commonRoutes);
+
+  const router = createBrowserRouter(routes);
+
   return <RouterProvider router={router} />;
 };
