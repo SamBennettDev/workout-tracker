@@ -1,3 +1,3 @@
 export const ProtectedHome = () => {
-  return <div>Protected</div>;
+  return <h1>Protected</h1>;
 };

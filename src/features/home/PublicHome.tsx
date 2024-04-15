@@ -1,3 +1,3 @@
 export const PublicHome = () => {
-  return <div>Public</div>;
+  return <h1>Public</h1>;
 };
