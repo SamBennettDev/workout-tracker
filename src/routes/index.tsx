@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import { protectedRoutes } from "./protected";
 import { publicRoutes } from "./public";
@@ -22,7 +22,12 @@ export const AppRoutes = () => {
     ? protectedRoutes.concat(commonRoutes)
     : publicRoutes.concat(commonRoutes);
 
-  const router = createBrowserRouter(routes);
-
-  return <RouterProvider router={router} />;
+  return (
+    <Routes>
+      {routes.map(({ path, element }, index) => (
+        <Route key={index} path={path} element={element} />
+      ))}
+      <Route path="*" element={<ErrorPage />} />
+    </Routes>
+  );
 };
