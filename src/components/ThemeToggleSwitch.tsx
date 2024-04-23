@@ -20,16 +20,16 @@ export function ThemeToggle() {
         checked={isChecked}
         onChange={toggleTheme}
       />
-      <div className="relative w-14 h-7 bg-card peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-foreground after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-card"></div>
+      <div className="relative w-14 h-7 bg-card peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-foreground after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-foreground-muted"></div>
       <div
-        className={`absolute left-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center w-6 h-6 -ml-3 text-foreground z-1 ${
+        className={`absolute left-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center w-6 h-6 -ml-3 text-foreground ${
           isChecked ? "opacity-100" : "opacity-0"
         }`}
       >
         <FontAwesomeIcon icon={faMoon} />
       </div>
       <div
-        className={`absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 flex items-center justify-center w-6 h-6 -mr-3 text-foreground z-1 ${
+        className={`absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 flex items-center justify-center w-6 h-6 -mr-3 text-foreground ${
           !isChecked ? "opacity-100" : "opacity-0"
         }`}
       >

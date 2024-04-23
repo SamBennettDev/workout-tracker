@@ -1,3 +1,4 @@
+import { navbarHeight } from "@/components/Navbar";
 import { useRouteError } from "react-router-dom";
 
 export const ErrorPage = () => {
@@ -8,7 +9,11 @@ export const ErrorPage = () => {
   console.error(error);
 
   return (
-    <div id="error-page">
+    <div
+      id="error-page"
+      className="flex justify-center items-center"
+      style={{ height: `calc(100vh - ${navbarHeight}px)` }}
+    >
       <h1>Oops!</h1>
       <p>Sorry, an unexpected error has occurred.</p>
       <p>
