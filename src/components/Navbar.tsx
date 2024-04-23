@@ -5,7 +5,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
 
-export const navbarHeight = 50; // Set the navbar height here
+export const navbarHeight = "70";
 
 export function Navbar() {
   return (
