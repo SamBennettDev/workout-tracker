@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useTheme } from "@/providers/theme";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -11,14 +13,28 @@ export function ThemeToggle() {
   };
 
   return (
-    <label className="inline-flex items-center cursor-pointer">
+    <label className="inline-flex items-center cursor-pointer relative">
       <input
         type="checkbox"
         className="sr-only peer"
         checked={isChecked}
         onChange={toggleTheme}
       />
-      <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-zinc-300 dark:peer-focus:ring-zinc-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-zinc-600"></div>
+      <div className="relative w-14 h-7 bg-card peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-foreground after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-card"></div>
+      <div
+        className={`absolute left-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 flex items-center justify-center w-6 h-6 -ml-3 text-foreground z-1 ${
+          isChecked ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <FontAwesomeIcon icon={faMoon} />
+      </div>
+      <div
+        className={`absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 flex items-center justify-center w-6 h-6 -mr-3 text-foreground z-1 ${
+          !isChecked ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <FontAwesomeIcon icon={faSun} />
+      </div>
     </label>
   );
 }
