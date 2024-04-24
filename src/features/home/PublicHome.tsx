@@ -1,4 +1,5 @@
 import { navbarHeight } from "@/components/Navbar";
+import { H1 } from "@/components/Typography";
 
 export const PublicHome = () => {
   return (
@@ -6,7 +7,7 @@ export const PublicHome = () => {
       className="flex justify-center items-center"
       style={{ height: `calc(100vh - ${navbarHeight}px)` }}
     >
-      <h1>Public</h1>
+      <H1>Please Login</H1>
     </div>
   );
 };

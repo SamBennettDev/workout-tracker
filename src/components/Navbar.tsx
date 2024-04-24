@@ -1,9 +1,10 @@
 import { mainNav } from "@/config/nav-items";
-import { ThemeToggle } from "./ThemeToggleSwitch";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
+import { login, logout } from "@/lib/authorization";
+import { useAuth } from "@/lib/auth";
 
 export const navbarHeight = "70";
 
@@ -21,16 +22,18 @@ export function Navbar() {
 }
 
 function DesktopNav() {
+  const auth = useAuth();
   const location = useLocation();
 
   return (
     <nav
-      className={`h-[${navbarHeight}px] flex justify-between items-center mx-[20px]`}
+      className={`flex justify-between items-center mx-[20px]`}
+      style={{ height: `${navbarHeight}px` }}
     >
       <div className="flex gap-[10px]">
         <Link to="/" className="flex items-center justify-center mr-[10px]">
-          <div className="font-bold">React</div>
-          <div className="">Essentials</div>
+          <div className="font-bold">Gains</div>
+          <div className="">Tracker</div>
         </Link>
         {mainNav.map((navItem, index) => {
           return (
@@ -49,12 +52,17 @@ function DesktopNav() {
           );
         })}
       </div>
-      <ThemeToggle />
+      {auth.isAuthenticated ? (
+        <button onClick={logout}>Logout</button>
+      ) : (
+        <button onClick={login}>Login</button>
+      )}
     </nav>
   );
 }
 
 function MobileNav() {
+  const auth = useAuth();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -65,7 +73,8 @@ function MobileNav() {
   return (
     <>
       <nav
-        className={`h-[${navbarHeight}px] flex justify-between items-center mx-[20px]`}
+        className={`flex justify-between items-center mx-[20px]`}
+        style={{ height: `${navbarHeight}px` }}
       >
         <div className="flex items-center">
           {/* Hamburger menu */}
@@ -78,8 +87,11 @@ function MobileNav() {
           </button>
         </div>
 
-        {/* Theme toggle */}
-        <ThemeToggle />
+        {auth.isAuthenticated ? (
+          <button onClick={logout}>Logout</button>
+        ) : (
+          <button onClick={login}>Login</button>
+        )}
       </nav>
 
       <div
@@ -89,15 +101,16 @@ function MobileNav() {
       >
         {/* Logo (only visible when menu is open) */}
         <div
-          className={`h-[${navbarHeight}px] flex justify-between w-full px-[20px]`}
+          className={`flex justify-between w-full px-[20px]`}
+          style={{ height: `${navbarHeight}px` }}
         >
           <Link
             to="/"
             className={`flex items-center justify-center w-min text-2xl`}
             onClick={toggleMenu}
           >
-            <div className="font-bold">React</div>
-            <div className="">Essentials</div>
+            <div className="font-bold">Gains</div>
+            <div className="">Tracker</div>
           </Link>
           <button
             className="md:hidden"

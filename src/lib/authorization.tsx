@@ -1,24 +1,39 @@
-import { useAuth } from "./auth";
+import { app } from "@/providers/firebase";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
+import firebase from "firebase/compat/app";
 
-export const login = (email: string, password: string) => {
-  // Modify this to use API call to get user
-  const user = {
-    id: "1",
-    name: "John Doe",
-    email: "john.doe@example.com",
-  };
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-  const [, setAuthState] = useAuth();
-  setAuthState({
-    user,
-    isAuthenticated: true,
-  });
+export const login = async () => {
+  try {
+    // Sign in using a popup.
+    provider.addScope("profile");
+    provider.addScope("email");
+    const result = await signInWithPopup(auth, provider);
+
+    // The signed-in user info.
+    const user = result.user as firebase.User;
+
+    if (user) {
+    } else {
+      throw new Error("User not found after login.");
+    }
+  } catch (error) {
+    console.error("Error occurred during login:", error);
+  }
 };
 
-export const logout = () => {
-  const [, setAuthState] = useAuth();
-  setAuthState({
-    user: null,
-    isAuthenticated: false,
-  });
+export const logout = async () => {
+  try {
+    await signOut(auth);
+    console.log("cool");
+  } catch (error) {
+    console.error("Error occurred during logout:", error);
+  }
 };

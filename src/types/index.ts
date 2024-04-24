@@ -1,10 +1,6 @@
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-}
+import firebase from "firebase/compat/app";
 
 export interface AuthState {
-  user: User | null;
+  user: firebase.User | null;
   isAuthenticated: boolean;
 }

@@ -1,14 +1,27 @@
+import { app } from "@/providers/firebase";
 import { AuthState } from "@/types";
-import { useState } from "react";
+import { getAuth } from "firebase/auth";
+import { useState, useEffect } from "react";
+import firebase from "firebase/compat/app";
 
-export const useAuth = (): [
-  AuthState,
-  React.Dispatch<React.SetStateAction<AuthState>>
-] => {
+const authFirebase = getAuth(app);
+
+export const useAuth = (): AuthState => {
   const [auth, setAuth] = useState<AuthState>({
     user: null,
-    isAuthenticated: false,
+    isAuthenticated: false, // Assuming user is initially not authenticated
   });
 
-  return [auth, setAuth];
+  useEffect(() => {
+    const unsubscribe = authFirebase.onAuthStateChanged((user) => {
+      setAuth({
+        user: user as firebase.User,
+        isAuthenticated: !!user, // Convert user to boolean (true if user exists, false if null)
+      });
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  return auth;
 };

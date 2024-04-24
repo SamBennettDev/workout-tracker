@@ -16,9 +16,9 @@ const commonRoutes = [
 ];
 
 export const AppRoutes = () => {
-  const [auth] = useAuth();
+  const auth = useAuth();
 
-  const routes = auth.user
+  const routes = auth.isAuthenticated
     ? protectedRoutes.concat(commonRoutes)
     : publicRoutes.concat(commonRoutes);
 
