@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
 import { login, logout } from "@/lib/authorization";
 import { useAuth } from "@/lib/auth";
+import Stopwatch from "./StopWatch";
 
 export const navbarHeight = "70";
 
@@ -76,7 +77,7 @@ function MobileNav() {
         className={`flex justify-between items-center mx-[20px]`}
         style={{ height: `${navbarHeight}px` }}
       >
-        <div className="flex items-center">
+        <div className="flex items-center w-1/3">
           {/* Hamburger menu */}
           <button
             className="md:hidden"
@@ -87,10 +88,16 @@ function MobileNav() {
           </button>
         </div>
 
+        <Stopwatch />
+
         {auth.isAuthenticated ? (
-          <button onClick={logout}>Logout</button>
+          <button onClick={logout} className="w-1/3 flex justify-end">
+            Logout
+          </button>
         ) : (
-          <button onClick={login}>Login</button>
+          <button onClick={login} className="w-1/3 flex justify-end">
+            Login
+          </button>
         )}
       </nav>
 

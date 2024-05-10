@@ -23,8 +23,6 @@ export function Exercise({
   const prevWeight = exerciseData[mostRecentDate][0];
   const prevReps = exerciseData[mostRecentDate][1];
 
-  console.log(parsedDates);
-
   return (
     <div className="w-full h-[150px] flex flex-col text-2xl px-2">
       <div className="bg-card h-[50px] w-full flex justify-between items-center rounded-t-lg">

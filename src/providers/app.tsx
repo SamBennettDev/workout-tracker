@@ -1,6 +1,8 @@
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ThemeProvider } from "./theme";
 import { BrowserRouter } from "react-router-dom";
+import { DayProvider } from "./day";
+import { ExerciseDataProvider } from "./exercises";
 
 const queryClient = new QueryClient();
 
@@ -13,7 +15,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-          {children}
+          <DayProvider>
+            <ExerciseDataProvider>{children}</ExerciseDataProvider>
+          </DayProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </BrowserRouter>

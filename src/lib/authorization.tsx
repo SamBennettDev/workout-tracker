@@ -1,4 +1,5 @@
 import { app } from "@/providers/firebase";
+import { seedUserData } from "@/utils/seedDatabase";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -19,6 +20,8 @@ export const login = async () => {
 
     // The signed-in user info.
     const user = result.user as firebase.User;
+
+    await seedUserData(user.uid);
 
     if (user) {
     } else {
