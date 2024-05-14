@@ -24,8 +24,6 @@ export const fetchExerciseData = async (userId: string): Promise<UserData> => {
       exercises: snapshot.docs[7].data() as ExercisesData,
     };
 
-    console.log(userData);
-
     return userData;
   } catch (error) {
     console.error("Error fetching exercise data:", error);
