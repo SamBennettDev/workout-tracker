@@ -1,8 +1,11 @@
 import { useAuth } from "@/lib/auth";
+import { DayContext } from "@/providers/day";
+import { useExerciseData } from "@/providers/exercises";
 import { ExerciseData } from "@/types";
 import { updateExercise } from "@/utils/updateExercise";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext } from "react";
 
 export function Exercise({
   exerciseName,
@@ -12,6 +15,8 @@ export function Exercise({
   exerciseData: ExerciseData;
 }) {
   const auth = useAuth();
+  const { deleteExerciseAndUpdateVersion } = useExerciseData();
+  const { currentDay } = useContext(DayContext);
 
   // Parse and sort the dates
   const parsedDates = Object.keys(exerciseData).map((dateString) => ({
@@ -42,7 +47,18 @@ export function Exercise({
           <FontAwesomeIcon icon={faMinus} className="h-5 w-5 text-card" />
         </div>
         <h1 className="w-fit">{exerciseName}</h1>
-        <button className="px-3">
+        <button
+          onClick={() => {
+            if (auth.user) {
+              deleteExerciseAndUpdateVersion(
+                exerciseName,
+                auth.user?.uid,
+                currentDay.toString()
+              );
+            }
+          }}
+          className="px-3"
+        >
           <FontAwesomeIcon icon={faMinus} className="h-5 w-5" />
         </button>
       </div>

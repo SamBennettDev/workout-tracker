@@ -23,8 +23,7 @@ export const login = async () => {
 
     await seedUserData(user.uid);
 
-    if (user) {
-    } else {
+    if (!user) {
       throw new Error("User not found after login.");
     }
   } catch (error) {

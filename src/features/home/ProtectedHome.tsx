@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { DayContext } from "@/providers/day";
 import { useContext } from "react";
 import { useExerciseData } from "@/providers/exercises";
+import { AddExercise } from "@/components/AddExercise";
 
 export const ProtectedHome = () => {
   const { exerciseData, isLoading, error } = useExerciseData();
@@ -19,13 +20,12 @@ export const ProtectedHome = () => {
   }
 
   if (exerciseData) {
-    console.log(exerciseData);
-    const exercises = Object.entries(exerciseData.exercises ?? {}).map(
-      ([name, data]) => ({
-        name,
-        data,
-      })
-    );
+    const exercises = (
+      exerciseData[currentDay as keyof UserData]?.exercises ?? []
+    ).map((name: string) => ({
+      name,
+      data: exerciseData.exercises[name],
+    }));
 
     return (
       <div>
@@ -44,6 +44,8 @@ export const ProtectedHome = () => {
               />
             );
           })}
+
+          <AddExercise />
         </div>
 
         <div

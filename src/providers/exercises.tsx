@@ -3,11 +3,23 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchExerciseData } from "@/utils/fetchExerciseData";
 import { useAuth } from "@/lib/auth";
 import { UserData } from "@/types";
+import { addExercise } from "@/utils/addExercise";
+import { deleteExercise } from "@/utils/deleteExercise";
 
 type ExerciseDataContextValue = {
   exerciseData: UserData;
   isLoading: boolean;
   error: Error | null;
+  addExerciseAndUpdateVersion: (
+    formData: FormData,
+    userId: string,
+    currentDay: string
+  ) => Promise<void>;
+  deleteExerciseAndUpdateVersion: (
+    exerciseName: string,
+    userId: string,
+    currentDay: string
+  ) => Promise<void>;
 };
 
 const initialContextValue: ExerciseDataContextValue = {
@@ -23,6 +35,8 @@ const initialContextValue: ExerciseDataContextValue = {
   },
   isLoading: false,
   error: null,
+  addExerciseAndUpdateVersion: addExercise,
+  deleteExerciseAndUpdateVersion: deleteExercise,
 };
 
 type ExerciseDataProviderProps = {
@@ -41,13 +55,14 @@ export const ExerciseDataProvider = ({
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
+  const [version, setVersion] = useState<number>(0); // Add version state
 
   const {
     data,
     error: queryError,
     isLoading: queryIsLoading,
   } = useQuery({
-    queryKey: ["exerciseData"],
+    queryKey: ["exerciseData", version],
     enabled: auth.user !== null,
     queryFn: () => fetchExerciseData(auth.user?.uid ?? ""),
   });
@@ -68,8 +83,34 @@ export const ExerciseDataProvider = ({
     setIsLoading(queryIsLoading);
   }, [queryIsLoading]);
 
+  const addExerciseAndUpdateVersion = async (
+    formData: FormData,
+    userId: string,
+    currentDay: string
+  ) => {
+    await addExercise(formData, userId, currentDay);
+    setVersion((prevVersion) => prevVersion + 1); // Increment version
+  };
+
+  const deleteExerciseAndUpdateVersion = async (
+    exerciseName: string,
+    userId: string,
+    currentDay: string
+  ) => {
+    await deleteExercise(exerciseName, userId, currentDay);
+    setVersion((prevVersion) => prevVersion + 1); // Increment version
+  };
+
   return (
-    <ExerciseDataContext.Provider value={{ exerciseData, isLoading, error }}>
+    <ExerciseDataContext.Provider
+      value={{
+        exerciseData,
+        isLoading,
+        error,
+        addExerciseAndUpdateVersion,
+        deleteExerciseAndUpdateVersion,
+      }}
+    >
       {children}
     </ExerciseDataContext.Provider>
   );
