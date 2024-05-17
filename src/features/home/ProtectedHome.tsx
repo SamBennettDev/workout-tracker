@@ -6,6 +6,7 @@ import { DayContext } from "@/providers/day";
 import { useContext } from "react";
 import { useExerciseData } from "@/providers/exercises";
 import { AddExercise } from "@/components/AddExercise";
+import { Exercise as ExerciseType, UserData } from "@/types";
 
 export const ProtectedHome = () => {
   const { exerciseData, isLoading, error } = useExerciseData();
@@ -21,7 +22,7 @@ export const ProtectedHome = () => {
 
   if (exerciseData) {
     const exercises = (
-      exerciseData[currentDay as keyof UserData]?.exercises ?? []
+      (exerciseData[currentDay as keyof UserData]?.exercises as string[]) ?? []
     ).map((name: string) => ({
       name,
       data: exerciseData.exercises[name],
@@ -35,7 +36,7 @@ export const ProtectedHome = () => {
             height: `calc(100vh - ${String(Number(navbarHeight) * 2)}px)`,
           }}
         >
-          {exercises.map((exercise) => {
+          {exercises.map((exercise: ExerciseType) => {
             return (
               <Exercise
                 exerciseName={exercise.name}
@@ -56,10 +57,9 @@ export const ProtectedHome = () => {
             <FontAwesomeIcon icon={faLessThan} className="h-5 w-5" />
           </button>
           <h2 className="text-2xl">
-            {
-              // @ts-ignore
-              exerciseData[currentDay].name.toUpperCase()
-            }
+            {(
+              exerciseData[currentDay as keyof UserData].name as string
+            ).toUpperCase()}
           </h2>
           <button onClick={nextDay} className="h-5 w-5">
             <FontAwesomeIcon icon={faGreaterThan} className="h-5 w-5" />
