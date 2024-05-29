@@ -3,11 +3,6 @@ import { faHome, faList } from "@fortawesome/free-solid-svg-icons";
 
 export const mainNav: MainNavItem[] = [
   {
-    title: "Projects",
-    href: "/Projects",
-    icon: faHome,
-  },
-  {
     title: "Exercise List",
     href: "/exercise-list",
     icon: faList,
