@@ -1,12 +1,17 @@
 import { AppProvider } from "@/providers/app";
 import { AppRoutes } from "@/routes";
-import { Navbar } from "./components/Navbar";
+import { DesktopNav } from "./components/DesktopNav";
+import { AppNav } from "./components/AppNav";
+import ContentContainer from "./components/ContentContainer";
 
 function App() {
   return (
     <AppProvider>
-      <Navbar />
-      <AppRoutes />
+      <DesktopNav />
+      <ContentContainer>
+        <AppRoutes />
+      </ContentContainer>
+      <AppNav />
     </AppProvider>
   );
 }

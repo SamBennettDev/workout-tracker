@@ -1,12 +1,12 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchExerciseData } from "@/utils/fetchExerciseData";
-import { useAuth } from "@/lib/auth";
 import { UserData } from "@/types";
 import { addExercise } from "@/utils/addExercise";
 import { deleteExercise } from "@/utils/deleteExercise";
+import { useAuth } from "@/hooks/useAuth";
 
-type ExerciseDataContextValue = {
+export type ExerciseDataContextValue = {
   exerciseData: UserData;
   isLoading: boolean;
   error: Error | null;
@@ -20,23 +20,19 @@ type ExerciseDataContextValue = {
     userId: string,
     currentDay: string
   ) => Promise<void>;
+  incrementVersion: () => void; // New function to increment version
 };
 
 const initialContextValue: ExerciseDataContextValue = {
   exerciseData: {
     exercises: {},
-    "0": { exercises: [], name: "0" },
-    "1": { exercises: [], name: "1" },
-    "2": { exercises: [], name: "2" },
-    "3": { exercises: [], name: "3" },
-    "4": { exercises: [], name: "4" },
-    "5": { exercises: [], name: "5" },
-    "6": { exercises: [], name: "6" },
+    program: {},
   },
   isLoading: false,
   error: null,
   addExerciseAndUpdateVersion: addExercise,
   deleteExerciseAndUpdateVersion: deleteExercise,
+  incrementVersion: () => {}, // Placeholder function
 };
 
 type ExerciseDataProviderProps = {
@@ -49,7 +45,7 @@ export const ExerciseDataContext =
 export const ExerciseDataProvider = ({
   children,
 }: ExerciseDataProviderProps) => {
-  const auth = useAuth();
+  const user = useAuth().currentUser;
   const [exerciseData, setExerciseData] = useState<UserData>(
     initialContextValue.exerciseData
   );
@@ -63,8 +59,8 @@ export const ExerciseDataProvider = ({
     isLoading: queryIsLoading,
   } = useQuery({
     queryKey: ["exerciseData", version],
-    enabled: auth.user !== null,
-    queryFn: () => fetchExerciseData(auth.user?.uid ?? ""),
+    enabled: user !== null,
+    queryFn: () => fetchExerciseData(user?.uid ?? ""),
   });
 
   useEffect(() => {
@@ -101,6 +97,10 @@ export const ExerciseDataProvider = ({
     setVersion((prevVersion) => prevVersion + 1); // Increment version
   };
 
+  const incrementVersion = () => {
+    setVersion((prevVersion) => prevVersion + 1); // Increment version
+  };
+
   return (
     <ExerciseDataContext.Provider
       value={{
@@ -109,19 +109,10 @@ export const ExerciseDataProvider = ({
         error,
         addExerciseAndUpdateVersion,
         deleteExerciseAndUpdateVersion,
+        incrementVersion,
       }}
     >
       {children}
     </ExerciseDataContext.Provider>
   );
-};
-
-export const useExerciseData = (): ExerciseDataContextValue => {
-  const context = useContext(ExerciseDataContext);
-  if (!context) {
-    throw new Error(
-      "useExerciseData must be used within an ExerciseDataProvider"
-    );
-  }
-  return context;
 };

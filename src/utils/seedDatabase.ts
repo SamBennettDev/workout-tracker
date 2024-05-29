@@ -1,26 +1,38 @@
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
-import { db } from "@/providers/firebase";
-import { seedData } from "@/config/exercises"; // Assuming you have access to the seedDatabase object
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { UserData } from "@/types";
 
-export const seedUserData = async (userId: string) => {
+export const seedDatabase = async (userId: string) => {
+  const userRef = doc(db, "users", userId);
+
+  const initialData: UserData = {
+    exercises: {
+      "Bench Press": {
+        history: {},
+      },
+      Squat: {
+        history: {},
+      },
+      Deadlift: {
+        history: {},
+      },
+    },
+    program: {
+      "0": { exercises: [], name: "Sun" },
+      "1": { exercises: [], name: "Mon" },
+      "2": { exercises: [], name: "Tue" },
+      "3": { exercises: [], name: "Wed" },
+      "4": { exercises: [], name: "Thu" },
+      "5": { exercises: [], name: "Fri" },
+      "6": { exercises: [], name: "Sat" },
+    },
+  };
+
   try {
-    // Query the collection to check if it has any documents
-    const exerciseRef = collection(db, userId);
-    console.log(exerciseRef);
-    const snapshot = await getDocs(exerciseRef);
-    const hasDocuments = !snapshot.empty;
-
-    if (!hasDocuments) {
-      // Iterate over each key in seedDatabase and set the document in the database
-      for (const key of Object.keys(seedData)) {
-        await setDoc(doc(collection(db, userId), key), seedData[key]);
-      }
-
-      console.log("Database seeded successfully.");
-    }
+    await setDoc(userRef, initialData);
+    console.log("Database seeded successfully.");
   } catch (error) {
     console.error("Error seeding database:", error);
+    throw error;
   }
 };
-
-export default seedUserData;
