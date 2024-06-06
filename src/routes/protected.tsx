@@ -1,6 +1,6 @@
 import { Account, AccountSettings } from "@/features/account";
 import { ProtectedHome } from "@/features/home";
-import { ExerciseList } from "@/features/pages";
+import { ExerciseAnalytics, ExerciseList } from "@/features/pages";
 
 export const protectedRoutes = [
   {
@@ -22,5 +22,9 @@ export const protectedRoutes = [
   {
     path: "/exercise-list",
     element: <ExerciseList />,
+  },
+  {
+    path: "/exercise-history",
+    element: <ExerciseAnalytics />,
   },
 ];
