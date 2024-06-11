@@ -1,6 +1,6 @@
 import { Account, AccountSettings } from "@/features/account";
 import { ProtectedHome } from "@/features/home";
-import { ExerciseAnalytics, ExerciseList } from "@/features/pages";
+import { ExerciseAnalytics, ExerciseList, Timer } from "@/features/pages";
 
 export const protectedRoutes = [
   {
@@ -26,5 +26,9 @@ export const protectedRoutes = [
   {
     path: "/exercise-history",
     element: <ExerciseAnalytics />,
+  },
+  {
+    path: "/timer",
+    element: <Timer />,
   },
 ];

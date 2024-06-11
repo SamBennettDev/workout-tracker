@@ -24,7 +24,10 @@ export function AppNav() {
             key={navItem.title}
             target={navItem.external ? "_blank" : undefined}
           >
-            <FontAwesomeIcon icon={navItem.icon} size="2x"></FontAwesomeIcon>
+            <FontAwesomeIcon
+              icon={navItem.icon}
+              className="text-2xl"
+            ></FontAwesomeIcon>
           </Link>
         );
       })}
@@ -37,7 +40,7 @@ export function AppNav() {
         to={"/Account"}
         key={"Account"}
       >
-        <FontAwesomeIcon icon={faUser} size="2x"></FontAwesomeIcon>
+        <FontAwesomeIcon icon={faUser} className="text-2xl"></FontAwesomeIcon>
       </Link>
     </nav>
   );

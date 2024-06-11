@@ -1,5 +1,10 @@
 import { MainNavItem, NavItem } from "@/types/nav";
-import { faChartLine, faHome, faList } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChartLine,
+  faClock,
+  faHome,
+  faList,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const mainNav: MainNavItem[] = [
   {
@@ -11,6 +16,11 @@ export const mainNav: MainNavItem[] = [
     title: "History",
     href: "/exercise-history",
     icon: faChartLine,
+  },
+  {
+    title: "Timer",
+    href: "/timer",
+    icon: faClock,
   },
 ];
 
@@ -29,5 +39,10 @@ export const appNav: NavItem[] = [
     title: "History",
     href: "/exercise-history",
     icon: faChartLine,
+  },
+  {
+    title: "Timer",
+    href: "/timer",
+    icon: faClock,
   },
 ];
