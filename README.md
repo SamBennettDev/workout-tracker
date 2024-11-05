@@ -15,7 +15,7 @@ Welcome to **Gains Tracker** – Your Personal Workout Companion!
 
 ## Getting Started
 
-Visit `https://gains.sam-bennett.dev/` on your phone or computer to get started with tracking your gains.
+Visit [gains.sam-bennett.dev](https://gains.sam-bennett.dev/) on your phone or computer to get started with tracking your gains.
 
 ## License
 
