@@ -48,7 +48,7 @@ export function Timer() {
   return (
     <>
       {time === "stopped" ? (
-        <h1 className="absolute top-1/2 text-muted-foreground">
+        <h1 className="absolute top-1/2 md:top-[60vh] text-muted-foreground">
           Click on time to start
         </h1>
       ) : null}

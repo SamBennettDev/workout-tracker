@@ -15,8 +15,8 @@ export function DesktopNav() {
     >
       <div className="flex gap-[10px]">
         <Link to="/" className="flex items-center justify-center mr-[10px]">
-          <div className="font-bold">React</div>
-          <div className="">Essentials</div>
+          <div className="font-bold">Gains</div>
+          <div className="">Tracker</div>
         </Link>
         {mainNav.map((navItem, index) => {
           return (

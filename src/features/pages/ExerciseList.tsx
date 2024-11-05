@@ -60,7 +60,7 @@ export const ExerciseList: React.FC = () => {
           </li>
         ))}
       </ul>
-      <div className="bg-card h-[100px] w-full relative flex justify-between px-[20px] items-center rounded-lg py-[23px]">
+      <div className="bg-card h-[100px] w-full relative flex justify-between px-[20px] items-center rounded-lg py-[23px] mb-[20px]">
         <input
           type="text"
           value={newExercise}
