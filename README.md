@@ -1,35 +1,26 @@
-# React Essentials
+# Gains Tracker
 
-Welcome to **React Essentials** – Your Opinionated React Starter Kit!
+Welcome to **Gains Tracker** – Your Personal Workout Companion!
 
 ## Overview
 
-**React Essentials** is a comprehensive, opinionated starter kit designed to accelerate your React projects by providing a solid foundation with Vite, TypeScript, and Tailwind CSS. Whether you're a seasoned developer or just starting with React, this repository aims to streamline your development process and help you build robust, maintainable applications.
+**Gains Tracker** is a user-friendly application designed to help you monitor your workout progress with ease. Every day, log your reps and weight for each exercise, and watch your progress over time with a clear and informative graph of your workout history. Built with **React Essentials**, Gains Tracker combines speed, flexibility, and a streamlined UI to make tracking gains simple and effective.
 
 ## Features
 
-- **Vite**: Lightning-fast development with Vite for quick and efficient bundling.
-- **TypeScript**: Enjoy the benefits of static typing and improved code quality.
-- **Tailwind CSS**: Rapidly style your components with the utility-first approach of Tailwind CSS.
-- **Opinionated Structure**: A well-organized project structure for easy navigation and scalability.
-- **Essential Dependencies**: A curated set of dependencies to boost productivity without overwhelming complexity.
+- **Daily Logging**: Record reps and weight each day to track your progress.
+- **Progress Graph**: Visualize your workout history with a graph showing trends over time.
+- **React Essentials Foundation**: Built on Vite, TypeScript, and Tailwind CSS for a responsive and maintainable design.
+- **User-Friendly UI**: Clean, intuitive layout that makes tracking workouts a breeze.
 
 ## Getting Started
 
-Follow these simple steps to kickstart your project:
-
-1. Clone this repository: `git clone https://github.com/SamBennettDev/react-essentials.git`
-2. Navigate to the project directory: `cd react-essentials`
-3. Install dependencies: `npm install` or `yarn install`
-4. Start the development server: `npm run dev` or `yarn dev`
-
-You're ready to roll! Open your browser and go to `http://localhost:5173` to see your React app in action.
+Visit `https://gains.sam-bennett.dev/` on your phone or computer to get started with tracking your gains.
 
 ## License
 
-**React Essentials** is licensed under the MIT License. See the [LICENSE](LICENSE.txt) file for details.
+**Gains Tracker** is licensed under the MIT License. See the [LICENSE](LICENSE.txt) file for details.
 
 ---
 
-Thank you for choosing **React Essentials**! Happy coding! 🚀
-
+Thank you for choosing **Gains Tracker** – Track your progress, see your gains, and stay motivated! 🏋️
